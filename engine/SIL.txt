@@ -825,7 +825,13 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 
 // #2: Tap Note
 
-#2.preprocess:PreprocessNote
+#2.preprocess:Execute(
+    PreprocessNote
+    Or(
+        Auto
+        Set(EntityInput *Accuracy GoodWindow)
+    )
+)
 
 #2.spawnOrder:SpawnOrderTail
 
@@ -851,8 +857,9 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
             Set(EntitySharedMemory *InputSuccess true)
             Set(EntitySharedMemory *InputTouchID TempTouchID)
             Set(EntityInput *Judgment JudgeSimple(Subtract(TempTouchST InputOffset) NoteTailTime PerfectWindow GreatWindow GoodWindow))
+            Set(EntityInput *Accuracy Subtract(TempTouchST InputOffset NoteTailTime))
             Set(EntityInput *Bucket NoteBucket)
-            Set(EntityInput *BucketValue Multiply(1000 Subtract(TempTouchST InputOffset NoteTailTime)))
+            Set(EntityInput *BucketValue Multiply(1000 Accuracy))
             PlayLaneEffect
             PlayTapEffect
             PlayJudgmentSound
@@ -880,7 +887,13 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 
 // #3: Flick Note
 
-#3.preprocess:PreprocessNote
+#3.preprocess:Execute(
+    PreprocessNote
+    Or(
+        Auto
+        Set(EntityInput *Accuracy GoodWindow)
+    )
+)
 
 #3.spawnOrder:SpawnOrderTail
 
@@ -921,8 +934,9 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Set(EntityMemory *InputState Terminated)
                         Set(EntitySharedMemory *InputSuccess true)
                         Set(EntityInput *Judgment JudgeSimple(Subtract(ActivationTime InputOffset) NoteTailTime PerfectWindow GreatWindow GoodWindow))
+                        Set(EntityInput *Accuracy Subtract(ActivationTime InputOffset NoteTailTime))
                         Set(EntityInput *Bucket NoteBucket)
-                        Set(EntityInput *BucketValue Multiply(1000 Subtract(ActivationTime InputOffset NoteTailTime)))
+                        Set(EntityInput *BucketValue Multiply(1000 Accuracy))
                         PlayLaneEffect
                         PlayFlickEffect
                         PlayFlickSound
@@ -955,7 +969,13 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 
 // #4: Slide Touch Note
 
-#4.preprocess:PreprocessNote
+#4.preprocess:Execute(
+    PreprocessNote
+    Or(
+        Auto
+        Set(EntityInput *Accuracy GoodWindow)
+    )
+)
 
 #4.spawnOrder:SpawnOrderHead
 
@@ -989,8 +1009,9 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Set(EntityMemory *InputState Terminated)
                         Set(EntitySharedMemory *InputSuccess true)
                         Set(EntityInput *Judgment JudgeSimple(Subtract(Time InputOffset) NoteTailTime PerfectWindow GreatWindow GoodWindow))
+                        Set(EntityInput *Accuracy Subtract(Time InputOffset NoteTailTime))
                         Set(EntityInput *Bucket NoteBucket)
-                        Set(EntityInput *BucketValue Multiply(1000 Subtract(Time InputOffset NoteTailTime)))
+                        Set(EntityInput *BucketValue Multiply(1000 Accuracy))
                         PlayLaneEffect
                         PlayTapEffect
                         PlayJudgmentSound
@@ -1038,7 +1059,13 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 
 // #5: Slide Release Note
 
-#5.preprocess:PreprocessNote
+#5.preprocess:Execute(
+    PreprocessNote
+    Or(
+        Auto
+        Set(EntityInput *Accuracy GoodWindow)
+    )
+)
 
 #5.spawnOrder:SpawnOrderHead
 
@@ -1074,8 +1101,9 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Set(EntityMemory *InputState Terminated)
                         Set(EntitySharedMemory *InputSuccess true)
                         Set(EntityInput *Judgment JudgeSimple(Subtract(TempTouchT InputOffset) NoteTailTime PerfectWindow GreatWindow GoodWindow))
+                        Set(EntityInput *Accuracy Subtract(TempTouchT InputOffset NoteTailTime))
                         Set(EntityInput *Bucket NoteBucket)
-                        Set(EntityInput *BucketValue Multiply(1000 Subtract(TempTouchT InputOffset NoteTailTime)))
+                        Set(EntityInput *BucketValue Multiply(1000 Accuracy))
                         PlayLaneEffect
                         PlayTapEffect
                         PlayJudgmentSound
@@ -1123,7 +1151,13 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 
 // #6: Slide Flick Note
 
-#6.preprocess:PreprocessNote
+#6.preprocess:Execute(
+    PreprocessNote
+    Or(
+        Auto
+        Set(EntityInput *Accuracy GoodWindow)
+    )
+)
 
 #6.spawnOrder:SpawnOrderHead
 
@@ -1163,8 +1197,9 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Set(EntityMemory *InputState Terminated)
                         Set(EntitySharedMemory *InputSuccess true)
                         Set(EntityInput *Judgment JudgeSimple(Subtract(Time InputOffset) NoteTailTime PerfectWindow GreatWindow GoodWindow))
+                        Set(EntityInput *Accuracy Subtract(Time InputOffset NoteTailTime))
                         Set(EntityInput *Bucket NoteBucket)
-                        Set(EntityInput *BucketValue Multiply(1000 Subtract(Time InputOffset NoteTailTime)))
+                        Set(EntityInput *BucketValue Multiply(1000 Accuracy))
                         PlayLaneEffect
                         PlayFlickEffect
                         PlayFlickSound
@@ -1668,10 +1703,12 @@ SimLineState2:GetShifted(EntityInfoArray SimLineInfoOffset2 *State)
 // Entity Input Layout
 
 *Judgment:0
-*Bucket:1
-*BucketValue:2
+*Accuracy:1
+*Bucket:2
+*BucketValue:3
 
 Judgment:Get(EntityInput *Judgment)
+Accuracy:Get(EntityInput *Accuracy)
 Bucket:Get(EntityInput *Bucket)
 BucketValue:Get(EntityInput *BucketValue)
 
