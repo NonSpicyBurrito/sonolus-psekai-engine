@@ -411,17 +411,17 @@ PlayLaneEffect:And(
     )
 )
 
-PlayJudgmentSound:And(
+PlayTapJudgmentSound:And(
     SoundEffect
-    Play(Judgment MinEffectTime)
+    Play(Add(EffectMiss Judgment) MinEffectTime)
 )
-PlayFlickSound:And(
+PlayFlickJudgmentSound:And(
     SoundEffect
-    Play(EffectFlick MinEffectTime)
+    Play(Add(EffectMissAlternative Judgment) MinEffectTime)
 )
-PlayEmptySound:And(
+PlayStageSound:And(
     SoundEffect
-    Play(EffectEmpty MinEffectTime)
+    Play(EffectStage MinEffectTime)
 )
 
 EvenLanes:If(Equal(Mod(Lanes 2) 0) Divide(LaneWidth 2 1.2) 0)
@@ -696,7 +696,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Equal(AutoNoteArchetype 4)
                         Equal(AutoNoteArchetype 7)
                     )
-                    EffectFlick
+                    EffectPerfectAlternative
                     EffectPerfect
                 )
                 AutoNoteTailTime
@@ -788,7 +788,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                     GreaterOr(TempTouchX Multiply(GetShifted(LevelData *LaneBX Looper) 0.83))
                     LessOr(TempTouchX Multiply(GetShifted(LevelData *LaneBX Add(Looper 1)) 0.83))
                     Execute(
-                        PlayEmptySound
+                        PlayStageSound
                         And(
                             SlotEffect
                             SpawnParticleEffect(
@@ -862,7 +862,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
             Set(EntityInput *BucketValue Multiply(1000 Accuracy))
             PlayLaneEffect
             PlayTapEffect
-            PlayJudgmentSound
+            PlayTapJudgmentSound
         )
     )
 )
@@ -939,7 +939,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Set(EntityInput *BucketValue Multiply(1000 Accuracy))
                         PlayLaneEffect
                         PlayFlickEffect
-                        PlayFlickSound
+                        PlayFlickJudgmentSound
                     )
                 )
                 ProcessTouchDiscontinue
@@ -1014,7 +1014,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Set(EntityInput *BucketValue Multiply(1000 Accuracy))
                         PlayLaneEffect
                         PlayTapEffect
-                        PlayJudgmentSound
+                        PlayTapJudgmentSound
                     )
                 )
 				ProcessTouchDiscontinue
@@ -1106,7 +1106,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Set(EntityInput *BucketValue Multiply(1000 Accuracy))
                         PlayLaneEffect
                         PlayTapEffect
-                        PlayJudgmentSound
+                        PlayTapJudgmentSound
                     )
                 )
 				ProcessTouchDiscontinue
@@ -1202,7 +1202,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
                         Set(EntityInput *BucketValue Multiply(1000 Accuracy))
                         PlayLaneEffect
                         PlayFlickEffect
-                        PlayFlickSound
+                        PlayFlickJudgmentSound
                     )
                 )
 				ProcessTouchDiscontinue
@@ -1485,8 +1485,13 @@ EffectMiss:0
 EffectPerfect:1
 EffectGreat:2
 EffectGood:3
-EffectFlick:4
-EffectEmpty:5
+
+EffectMissAlternative:1000
+EffectPerfectAlternative:1001
+EffectGreatAlternative:1002
+EffectGoodAlternative:1003
+
+EffectStage:10000
 
 
 
