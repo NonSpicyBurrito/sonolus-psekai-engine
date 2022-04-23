@@ -157,7 +157,7 @@ ProcessTouchHead:And(
             Equal(TempTouchID NoteHeadInputTouchID)
             Not(TempTouchEnded)
             Execute(
-                Set(TemporaryMemory *TempTouchOccupied true)
+                Set(LevelMemory *TouchOccupied true)
                 Set(EntityMemory *InputState Activated)
                 Set(EntitySharedMemory *InputTouchID TempTouchID)
                 SpawnHoldEffect
@@ -166,11 +166,11 @@ ProcessTouchHead:And(
         And(
             Equal(NoteHeadState Despawned)
             GreaterOr(Subtract(Time InputOffset) NoteHeadTime)
-            Not(TempTouchOccupied)
+            Not(TouchOccupied)
             IsTouchY
             And(GreaterOr(TempTouchX Add(Multiply(NoteHeadX1 0.83) Multiply(LaneWidth -0.175))) LessOr(TempTouchX Add(Multiply(NoteHeadX2 0.83) Multiply(LaneWidth 0.175))))
             Execute(
-                Set(TemporaryMemory *TempTouchOccupied true)
+                Set(LevelMemory *TouchOccupied true)
                 Set(EntityMemory *InputState Activated)
                 Set(EntitySharedMemory *InputTouchID TempTouchID)
                 SpawnHoldEffect
@@ -776,48 +776,51 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 
 #1.touch@1:Or(
     Auto
-    And(
-        TempTouchStarted
-        IsTouchY
-        Not(TempTouchOccupied)
-        Execute(
-            Set(EntityMemory *Looper 0)
-            While(
-                Less(Looper Lanes)
-                And(
-                    GreaterOr(TempTouchX Multiply(GetShifted(LevelData *LaneBX Looper) 0.83))
-                    LessOr(TempTouchX Multiply(GetShifted(LevelData *LaneBX Add(Looper 1)) 0.83))
-                    Execute(
-                        PlayStageSound
-                        And(
-                            SlotEffect
-                            SpawnParticleEffect(
-                                ParticleEffectSlotL
-                                Multiply(GetShifted(LevelData *LaneBX Looper) 0.83) LaneY1
-                                Multiply(GetShifted(LevelData *LaneBX Looper) 0.83) TapEffectLY2
-                                Multiply(GetShifted(LevelData *LaneBX Add(Looper 1)) 0.83) TapEffectLY2
-                                Multiply(GetShifted(LevelData *LaneBX Add(Looper 1)) 0.83) LaneY1
-                                0.6
-                                0
+    Execute(
+        And(
+            TempTouchStarted
+            IsTouchY
+            Not(TouchOccupied)
+            Execute(
+                Set(EntityMemory *Looper 0)
+                While(
+                    Less(Looper Lanes)
+                    And(
+                        GreaterOr(TempTouchX Multiply(GetShifted(LevelData *LaneBX Looper) 0.83))
+                        LessOr(TempTouchX Multiply(GetShifted(LevelData *LaneBX Add(Looper 1)) 0.83))
+                        Execute(
+                            PlayStageSound
+                            And(
+                                SlotEffect
+                                SpawnParticleEffect(
+                                    ParticleEffectSlotL
+                                    Multiply(GetShifted(LevelData *LaneBX Looper) 0.83) LaneY1
+                                    Multiply(GetShifted(LevelData *LaneBX Looper) 0.83) TapEffectLY2
+                                    Multiply(GetShifted(LevelData *LaneBX Add(Looper 1)) 0.83) TapEffectLY2
+                                    Multiply(GetShifted(LevelData *LaneBX Add(Looper 1)) 0.83) LaneY1
+                                    0.6
+                                    0
+                                )
                             )
-                        )
-                        And(
-                            LaneEffect
-                            SpawnParticleEffect(
-                                ParticleEffectLaneL
-                                GetShifted(LevelData *LaneBX Looper) -1
-                                GetShifted(LevelData *LaneTX Looper) LaneY2
-                                GetShifted(LevelData *LaneTX Add(Looper 1)) LaneY2
-                                GetShifted(LevelData *LaneBX Add(Looper 1)) -1
-                                0.2
-                                0
+                            And(
+                                LaneEffect
+                                SpawnParticleEffect(
+                                    ParticleEffectLaneL
+                                    GetShifted(LevelData *LaneBX Looper) -1
+                                    GetShifted(LevelData *LaneTX Looper) LaneY2
+                                    GetShifted(LevelData *LaneTX Add(Looper 1)) LaneY2
+                                    GetShifted(LevelData *LaneBX Add(Looper 1)) -1
+                                    0.2
+                                    0
+                                )
                             )
                         )
                     )
+                    Set(EntityMemory *Looper Add(Looper 1))
                 )
-                Set(EntityMemory *Looper Add(Looper 1))
             )
         )
+        Set(LevelMemory *TouchOccupied false)
     )
 )
 
@@ -848,11 +851,11 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
         Not(InputState)
         IsNoteTailInGoodWindow
         TempTouchStarted
-        Not(TempTouchOccupied)
+        Not(TouchOccupied)
         IsTouchY
         IsTouchXInTailLane
         Execute(
-            Set(TemporaryMemory *TempTouchOccupied true)
+            Set(LevelMemory *TouchOccupied true)
             Set(EntityMemory *InputState Terminated)
             Set(EntitySharedMemory *InputSuccess true)
             Set(EntitySharedMemory *InputTouchID TempTouchID)
@@ -911,11 +914,11 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
             Not(InputState)
             IsNoteTailInGoodWindow
             TempTouchStarted
-            Not(TempTouchOccupied)
+            Not(TouchOccupied)
             IsTouchY
             IsTouchXInTailLane
             Execute(
-                Set(TemporaryMemory *TempTouchOccupied true)
+                Set(LevelMemory *TouchOccupied true)
                 Set(EntityMemory *InputState Activated)
                 Set(EntityMemory *ActivationTime TempTouchST)
                 Set(EntitySharedMemory *InputTouchID TempTouchID)
@@ -926,7 +929,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
             NotEqual(InputState Terminated)
             Equal(TempTouchID InputTouchID)
             Execute(
-                Set(TemporaryMemory *TempTouchOccupied true)
+                Set(LevelMemory *TouchOccupied true)
                 And(
                     IsNoteTailInGoodWindow
                     GreaterOr(TempTouchVR MinVR)
@@ -1000,7 +1003,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 			//GreaterOr(Subtract(TempTouchT TempTouchST) Subtract(NoteTailTime NoteHeadTime))
 			GreaterOr(Subtract(Time InputOffset) NoteTailTime)
             Execute(
-                Set(TemporaryMemory *TempTouchOccupied true)
+                Set(LevelMemory *TouchOccupied true)
                 Set(LevelMemory *Tilt Add(Tilt TempTouchX))
                 And(
 					GreaterOr(Subtract(Time InputOffset) NoteTailTime)
@@ -1091,7 +1094,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 			//GreaterOr(Subtract(TempTouchT TempTouchST) Subtract(NoteTailTime NoteHeadTime))
 			GreaterOr(Subtract(Time InputOffset Multiply(-1 PerfectWindow)) NoteTailTime)
             Execute(
-                Set(TemporaryMemory *TempTouchOccupied true)
+                Set(LevelMemory *TouchOccupied true)
                 Set(LevelMemory *Tilt Add(Tilt TempTouchX))
                 And(
                     TempTouchEnded
@@ -1183,7 +1186,7 @@ StageCoverY:Lerp(LaneY2 LaneY1 StageCover)
 			//GreaterOr(Subtract(TempTouchT TempTouchST) Subtract(NoteTailTime NoteHeadTime))
 			GreaterOr(Subtract(Time InputOffset) NoteTailTime)
             Execute(
-                Set(TemporaryMemory *TempTouchOccupied true)
+                Set(LevelMemory *TouchOccupied true)
                 Set(LevelMemory *Tilt Add(Tilt TempTouchX))
                 And(
                     Equal(InputState Activated)
@@ -1553,9 +1556,11 @@ NoteRefLane:Get(LevelMemory *NoteRefLane)
 // Level Memory Layout
 
 *Tilt:0
+*TouchOccupied:1
 *LevelLooper:255
 
 Tilt:Get(LevelMemory *Tilt)
+TouchOccupied:Get(LevelMemory *TouchOccupied)
 LevelLooper:Get(LevelMemory *LevelLooper)
 
 
@@ -1717,13 +1722,6 @@ Accuracy:Get(EntityInput *Accuracy)
 Bucket:Get(EntityInput *Bucket)
 BucketValue:Get(EntityInput *BucketValue)
 
-
-
-// Touch Temporary Memory Layout
-
-*TempTouchOccupied:0
-
-TempTouchOccupied:Get(TemporaryMemory *TempTouchOccupied)
 
 
 // Touch Temporary Data Layout
